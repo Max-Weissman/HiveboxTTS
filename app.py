@@ -2,14 +2,14 @@ import pyttsx3
 import requests
 
 class TTSProvider:
-    def __init__(self):
+    def __init__(self, male_voice):
         # Initialize fallback TTS engine
         self.fallback_engine = pyttsx3.init()
         voices = self.fallback_engine.getProperty('voices')
-        for voice in voices:
-            if "male" in voice.name.lower():
-                self.fallback_engine.setProperty('voice', voice.id)
-                break
+        if (male_voice):
+            self.fallback_engine.setProperty('voice', voices[0].id)
+        else:
+            self.fallback_engine.setProperty('voice', voices[1].id)
         self.fallback_engine.setProperty('rate', 150)
         self.fallback_engine.setProperty('volume', 0.9)
 
@@ -36,8 +36,8 @@ def summarize_text(question):
         return question
 
 class JarvisAssistant:
-    def __init__(self):
-        self.tts = TTSProvider()
+    def __init__(self, voice):
+        self.tts = TTSProvider(voice)
 
     def record(self, text, file):
         print(f"Jarvis: {text}")
@@ -49,7 +49,7 @@ class JarvisAssistant:
         self.record(summarized_text, 'soundfile.mp3')
         return open('soundfile.mp3', 'rb')
                     
-def main(text):
-    jarvis = JarvisAssistant()
+def main(text, voice):
+    jarvis = JarvisAssistant(voice)
     print("Initializing Jarvis...")
     return jarvis.run(text)

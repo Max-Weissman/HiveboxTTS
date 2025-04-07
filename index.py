@@ -5,7 +5,7 @@ server = Flask(__name__)
 
 @server.route("/", methods=['POST'])
 def hello_world():
-    data = (app.main(request.get_json()['question'])).read()
+    data = (app.main(request.get_json()['question'], request.get_json()['maleVoice'])).read()
     response = make_response(data)
     response.headers.set('Content-Type', 'application/octet-stream')
     return response
